@@ -1,8 +1,8 @@
 # логин \ пароль - manuel@gmail.com   Manuel12345$
-
+import time
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as EC, expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
 
@@ -22,6 +22,16 @@ class RegistrationPage:
     BUTTON_REGISTRATION = (By.CSS_SELECTOR, "#register-button")
 
     REGISTRATION_INFO = (By.CSS_SELECTOR, "div.header-links a.account")
+
+    "___________________________________"
+
+    EMAIL_ERROR = (By.CSS_SELECTOR, "span[data-valmsg-for='Email']")
+    PASSWORD_ERROR = (By.CSS_SELECTOR, "span[data-valmsg-for='Password']")
+    CONFIRM_PASSWORD_ERROR = (By.CSS_SELECTOR, "span[data-valmsg-for='ConfirmPassword']")
+    EXISTED_EMAIL_ERROR = (By.CSS_SELECTOR, "div[class='validation-summary-errors'] ul li")
+
+    VALIDATION_SUMMARY = (By.CSS_SELECTOR, ".validation-summary-errors")
+
 
 
     def __init__(self, driver):
@@ -70,23 +80,38 @@ class RegistrationPage:
         except TimeoutException:
             return False
 
-    # def get_alert_text(self):
-    #     alert = WebDriverWait(self.driver, timeout=10).until(
-    #         expected_conditions.alert_is_present()
+    def get_email_error(self):
+        error = WebDriverWait(self.driver, timeout=10).until(
+            expected_conditions.visibility_of_element_located(self.EMAIL_ERROR)
+        )
+        return error.text
+
+    def get_password_error(self):
+        error = WebDriverWait(self.driver, timeout=10).until(
+            expected_conditions.visibility_of_element_located(self.PASSWORD_ERROR)
+        )
+        return error.text
+
+    def get_confirm_password_error(self):
+        error = WebDriverWait(self.driver, timeout=10).until(
+            expected_conditions.visibility_of_element_located(self.CONFIRM_PASSWORD_ERROR)
+        )
+        return error.text
+
+    def get_existed_email_error(self):
+        error = WebDriverWait(self.driver, timeout=10).until(
+            expected_conditions.visibility_of_element_located(self.EXISTED_EMAIL_ERROR)
+        )
+        return error.text
+
+    # def get_field_error(self, locator):
+    #     element = WebDriverWait(self.driver, timeout=10).until(
+    #         EC.visibility_of_element_located(locator)
     #     )
-    #     return alert.text
+    #     return element.text
     #
-    # def accept_alert(self):
-    #     self.driver.switch_to.alert.accept()
-
-    def get_field_error(self, locator):
-        element = WebDriverWait(self.driver, timeout=10).until(
-            EC.visibility_of_element_located(locator)
-        )
-        return element.text
-
-    def get_validation_summary(self):
-        element = WebDriverWait(self.driver, timeout=10).until(
-            EC.visibility_of_element_located(self.VALIDATION_SUMMARY)
-        )
-        return element.text
+    # def get_validation_summary(self):
+    #     element = WebDriverWait(self.driver, timeout=10).until(
+    #         EC.visibility_of_element_located(self.VALIDATION_SUMMARY)
+    #     )
+    #     return element.text
