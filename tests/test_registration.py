@@ -1,18 +1,24 @@
+import uuid
+
 from pages.registration_page import RegistrationPage
 
 
 VALID_GENDER = "Male"
 VALID_FIRST_NAME = "Vladimir"
 VALID_LAST_NAME = "VladimirVV"
-VALID_EMAIL = "manuel1120@gmail.com"
+
+VALID_EMAIL = f"manuel_{uuid.uuid4().hex[:8]}@gmail.com"
+
 VALID_PASSWORD = "Manuel12345$"
 CONFIRM_PASSWORD = "Manuel12345$"
+
 INVALID_EMAIL = "manuelgmail.com"
-INVALID_PASSWORD = "Manuel12345"
+INVALID_PASSWORD = "123"
 
 
-def test_valid_login_success(driver):
+def test_registration_success(driver):
     registration_page = RegistrationPage(driver)
+
     registration_page.open_registration_page()
     registration_page.fill_gender(VALID_GENDER)
     registration_page.fill_first_name(VALID_FIRST_NAME)
@@ -22,7 +28,8 @@ def test_valid_login_success(driver):
     registration_page.fill_password_confirmation_field(CONFIRM_PASSWORD)
     registration_page.click_on_registration_button()
 
-    assert registration_page.is_registration_info_displayed()
+    assert registration_page.is_registration_info_displayed(), \
+        "Registration was not successful"
 
 # def test_registration_with_invalid_email(driver):
 #     registration_page = RegistrationPage(driver)
