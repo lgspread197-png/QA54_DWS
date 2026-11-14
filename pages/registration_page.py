@@ -24,7 +24,6 @@ class RegistrationPage:
     REGISTRATION_INFO = (By.CSS_SELECTOR, "div.header-links a.account")
 
 
-
     def __init__(self, driver):
         self.driver = driver
 
