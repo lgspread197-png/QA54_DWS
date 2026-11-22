@@ -18,6 +18,7 @@ class ShoppingPage(BasePage):
     AGREE_TERM_OF_USE_CHECK_BOX = (By.ID, "termsofservice")
     CHECKOUT_BUTTON = (By.ID, "checkout")
 
+    BILLING_ADDRESS_HEADER = (By.XPATH, "//h2[contains(text(), 'Billing Address')]")
     SELECT_BILLING_NEW_ADDRESS = (By.ID, "billing-address-select")
     SELECT_BILLING_COUNTRY = (By.ID, "BillingNewAddress_CountryId")
     SELECT_BILLING_CITY = (By.ID, "BillingNewAddress_City")
@@ -25,10 +26,14 @@ class ShoppingPage(BasePage):
     SELECT_BILLING_POSTAL_CODE = (By.ID, "BillingNewAddress_ZipPostalCode")
     SELECT_BILLING_PHONE_NUMBER = (By.ID, "BillingNewAddress_PhoneNumber")
 
-    BILLING_BUTTON_CONTINUE = (By.CSS_SELECTOR, "input[onclick='Billing.save()']")
+    BILLING_BUTTON_CONTINUE = (By.XPATH, "//input[@onclick='Billing.save()']")
 
     SHIPPING_SECTION = (By.ID, "opc-shipping")
     SHIPPING_SECTION_HEADER = (By.CSS_SELECTOR, "#opc-shipping h2")
+
+    SHIPPING_ADDRESS_BUTTON = (By.XPATH, "//input[@onclick='Shipping.save()']")
+    CHOOSE_SHIPPING_METHOD_GROUND = (By.CSS_SELECTOR, "label[for='shippingoption_0']")
+    SHIPPING_METHOD_BUTTON = (By.CSS_SELECTOR, "input[class='button-1 shipping-method-next-step-button']")
 
 
     def click_page_button(self):
@@ -69,6 +74,9 @@ class ShoppingPage(BasePage):
     def checkout_button(self):
         self.click(self.CHECKOUT_BUTTON)
 
+    def is_billing_address_displayed(self):
+        return self.is_element_shown(self.BILLING_ADDRESS_HEADER)
+
     def select_billing_new_address(self, address):
         address_select = Select(
             self.driver.find_element(*self.SELECT_BILLING_NEW_ADDRESS)
@@ -93,11 +101,16 @@ class ShoppingPage(BasePage):
     def fill_phone_number(self, phone_number):
         self.fill_text_input(self.SELECT_BILLING_PHONE_NUMBER, phone_number)
 
-    def billing_button_continue(self):
+    def click_billing_button_continue(self):
         self.click(self.BILLING_BUTTON_CONTINUE)
 
-    def is_billing_address_displayed(self):
-        return self.is_element_shown(self.SELECT_BILLING_COUNTRY)
+    def click_shipping_address_button(self):
+        self.click(self.SHIPPING_ADDRESS_BUTTON)
 
-    def is_shipping_section_displayed(self):
-        return self.is_element_shown(self.SHIPPING_SECTION_HEADER)
+    def choose_shipping_method_ground(self):
+        self.click(self.CHOOSE_SHIPPING_METHOD_GROUND)
+
+    def click_shipping_method_button(self):
+        self.click(self.SHIPPING_METHOD_BUTTON)
+
+

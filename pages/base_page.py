@@ -27,6 +27,7 @@ class BasePage:
         except TimeoutException:
             return False
 
+
     def is_page_redirected(self, partial_url) -> bool:
         try:
             WebDriverWait(self.driver, self.TIME_OUT).until(

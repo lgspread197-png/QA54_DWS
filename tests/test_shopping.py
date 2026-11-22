@@ -2,6 +2,7 @@ import time
 
 from pages.shopping_page import ShoppingPage
 from pages.login_page import LoginPage
+from selenium.webdriver.common.by import By
 
 
 def test_adding_success(driver):
@@ -31,4 +32,14 @@ def test_adding_success(driver):
     shopping_page.fill_postal_code("1234567")
     shopping_page.fill_phone_number("0531112233")
 
-    shopping_page.billing_button_continue()
+    shopping_page.click_billing_button_continue()
+    time.sleep(1)
+    assert shopping_page.is_element_shown("li[id='opc-shipping'] h2")
+    shopping_page.click_shipping_address_button()
+    time.sleep(8)
+    assert shopping_page.is_element_shown("li[id='opc-shipping_method'] h2")
+    shopping_page.choose_shipping_method_ground()
+    time.sleep(1)
+    assert shopping_page.is_element_shown("li[id='opc-payment_method'] h2")
+    shopping_page.click_shipping_method_button()
+    time.sleep(8)
