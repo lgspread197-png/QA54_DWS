@@ -1,11 +1,11 @@
-
+from faker import Faker
 from pages.shopping_page import ShoppingPage
 from pages.login_page import LoginPage
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-
+fake = Faker()
 def test_adding_success(driver):
 
     login_page = LoginPage(driver)    # Авторизация
@@ -34,6 +34,19 @@ def test_adding_success(driver):
     shopping_page.fill_billing_address1("Ben Gurion 1")
     shopping_page.fill_postal_code("1234567")
     shopping_page.fill_phone_number("0531112233")
+
+    # city = fake.city()
+    # address = fake.street_address()
+    # postal_code = fake.numerify("#######")
+    # phone = fake.numerify("05########")
+    #
+    # shopping_page.select_billing_new_address("New Address")
+    # shopping_page.select_billing_country("Israel")
+    # shopping_page.fill_billing_city(city)
+    # shopping_page.fill_billing_address1(address)
+    # shopping_page.fill_postal_code(postal_code)
+    # shopping_page.fill_phone_number(phone)
+
 
     shopping_page.click_billing_button_continue()
 
