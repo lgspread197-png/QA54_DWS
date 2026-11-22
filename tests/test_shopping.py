@@ -38,7 +38,7 @@ def test_adding_success(driver):
     # city = fake.city()
     # address = fake.street_address()
     # postal_code = fake.numerify("#######")
-    # phone = fake.numerify("05########")
+    # phone = fake.numerify(text="050########")
     #
     # shopping_page.select_billing_new_address("New Address")
     # shopping_page.select_billing_country("Israel")
