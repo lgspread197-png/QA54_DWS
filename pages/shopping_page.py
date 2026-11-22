@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.base_page import BasePage
 
@@ -10,15 +11,12 @@ class ShoppingPage(BasePage):
     SHOP_CART = (By.CSS_SELECTOR, "[class='cart-label']")
 
     QTY_IN_CART = (By.XPATH, "//input[contains(@class, 'qty-input')]")
-
-    ESTIMATE_SHIPPING_COUNTRY = (By.ID, "CountryId")
-    ESTIMATE_SHIPPING_STATE = (By.ID, "StateProvinceId")
-    BUTTON_ESTIMATE_SHIPPING = (By.NAME, "estimateshipping")
+    UPDATE_CART_BUTTON = (By.NAME, "updatecart")
 
     AGREE_TERM_OF_USE_CHECK_BOX = (By.ID, "termsofservice")
     CHECKOUT_BUTTON = (By.ID, "checkout")
 
-    BILLING_ADDRESS_HEADER = (By.XPATH, "//h2[contains(text(), 'Billing Address')]")
+    BILLING_ADDRESS_HEADER = (By.CSS_SELECTOR, "#opc-billing h2")
     SELECT_BILLING_NEW_ADDRESS = (By.ID, "billing-address-select")
     SELECT_BILLING_COUNTRY = (By.ID, "BillingNewAddress_CountryId")
     SELECT_BILLING_CITY = (By.ID, "BillingNewAddress_City")
@@ -28,13 +26,17 @@ class ShoppingPage(BasePage):
 
     BILLING_BUTTON_CONTINUE = (By.XPATH, "//input[@onclick='Billing.save()']")
 
-    SHIPPING_SECTION = (By.ID, "opc-shipping")
-    SHIPPING_SECTION_HEADER = (By.CSS_SELECTOR, "#opc-shipping h2")
-
     SHIPPING_ADDRESS_BUTTON = (By.XPATH, "//input[@onclick='Shipping.save()']")
     CHOOSE_SHIPPING_METHOD_GROUND = (By.CSS_SELECTOR, "label[for='shippingoption_0']")
     SHIPPING_METHOD_BUTTON = (By.CSS_SELECTOR, "input[class='button-1 shipping-method-next-step-button']")
 
+    PAYMENT_METHOD_HEADER = (By.CSS_SELECTOR, "#opc-payment_method h2")
+    PAYMENT_CASH_ON_DELIVERY = (By.ID, "paymentmethod_0")
+    PAYMENT_METHOD_BUTTON_CONTINUE = (By.CSS_SELECTOR, "input.payment-method-next-step-button")
+
+    PAYMENT_INFO_BUTTON_CONTINUE = (By.CSS_SELECTOR, "input.payment-info-next-step-button")
+    CONFIRM_ORDER_BUTTON = (By.CSS_SELECTOR, "input.confirm-order-next-step-button")
+    ORDER_COMPLETED_MESSAGE = (By.CSS_SELECTOR, ".order-completed .title strong")
 
     def click_page_button(self):
         self.click(self.BASE_PAGE)
@@ -53,20 +55,8 @@ class ShoppingPage(BasePage):
             *self.QTY_IN_CART
         ).get_attribute("value")
 
-    def estimate_shipping_country(self, country):
-        country_select = Select(
-            self.driver.find_element(*self.ESTIMATE_SHIPPING_COUNTRY)
-        )
-        country_select.select_by_visible_text(country)
-
-    def estimate_shipping_state(self, state):
-        state_select = Select(
-            self.driver.find_element(*self.ESTIMATE_SHIPPING_STATE)
-        )
-        state_select.select_by_visible_text(state)
-
-    def click_estimate_shipping_button(self):
-        self.click(self.BUTTON_ESTIMATE_SHIPPING)
+    def click_update_cart(self):
+        self.click(self.UPDATE_CART_BUTTON)
 
     def fill_check_box(self):
         self.click(self.AGREE_TERM_OF_USE_CHECK_BOX)
@@ -113,4 +103,25 @@ class ShoppingPage(BasePage):
     def click_shipping_method_button(self):
         self.click(self.SHIPPING_METHOD_BUTTON)
 
+    def choose_payment_cash_on_delivery(self):
+        self.click(self.PAYMENT_CASH_ON_DELIVERY)
 
+    def click_payment_method_button(self):
+        self.click(self.PAYMENT_METHOD_BUTTON_CONTINUE)
+
+    def is_payment_method_displayed(self):
+        return self.is_element_shown(self.PAYMENT_METHOD_HEADER)
+
+    def click_payment_info_button(self):
+        self.click(self.PAYMENT_INFO_BUTTON_CONTINUE)
+
+    def click_confirm_order(self):
+        self.click(self.CONFIRM_ORDER_BUTTON)
+
+    def get_order_completed_message(self):
+        return self.get_element_text(self.ORDER_COMPLETED_MESSAGE)
+
+    def wait_for_next_step(self):
+        WebDriverWait(self.driver, 15).until(
+            lambda driver: "Loading next step..." not in
+            driver.find_element(By.TAG_NAME, "body").text)
