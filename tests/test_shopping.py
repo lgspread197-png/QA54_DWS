@@ -25,18 +25,7 @@ def test_adding_success(driver):
     shopping_page.fill_check_box()    # Переход к оформлению заказа
     shopping_page.checkout_button()
 
-    elements = driver.find_elements(
-        By.XPATH, "//*[contains(., 'Billing Address')]"
-    )
-
-    for element in elements:
-        if element.text.strip() == "Billing Address":
-            print(element.tag_name)
-            print(element.is_displayed())
-            print(element.get_attribute("outerHTML"))
-
     assert shopping_page.is_page_redirected("/onepagecheckout")
-    print(driver.find_element(By.TAG_NAME, "body").text)
     assert shopping_page.is_billing_address_displayed()
 
     shopping_page.select_billing_new_address("New Address")    # Заполнение Billing Address
