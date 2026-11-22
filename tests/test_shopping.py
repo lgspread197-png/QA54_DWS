@@ -24,7 +24,6 @@ def test_adding_success(driver):
 
     assert shopping_page.is_page_redirected("/onepagecheckout")
 
-    # Заполняем Billing Address
     shopping_page.select_billing_new_address("New Address")
     shopping_page.select_billing_country("Israel")
     shopping_page.fill_billing_city("Haifa")
@@ -32,5 +31,4 @@ def test_adding_success(driver):
     shopping_page.fill_postal_code("1234567")
     shopping_page.fill_phone_number("0531112233")
 
-    # Продолжаем оформление
     shopping_page.billing_button_continue()
